@@ -1,5 +1,4 @@
-"""
-This is a solution to the first problem of the April 2015 Hacker Rank contest.
+"""This is a solution to the first problem of the April 2015 Hacker Rank contest.
 The problem states that there are N rats that each begin a race at different
 distances from a finish line. They each also begin with a constant speed. The
 solution determines which rats finish first. The rats are identified by their 
