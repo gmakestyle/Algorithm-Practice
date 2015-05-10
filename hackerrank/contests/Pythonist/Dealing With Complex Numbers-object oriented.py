@@ -1,48 +1,61 @@
 # Enter your code here. Read input from STDIN. Print output to STDOUT
 from math import sqrt
 
-def print_complex(real, im):
-    if real == 0 and im == 0: # print 0
-        print '0.00'
-    elif im == 0: # print only real part
-        print "{0:.2f}".format(real)
-    elif real == 0: # print only imaginary part
-        sign = '' if im > 0 else '-'
-        print sign + "{0:.2f}".format(abs(im)) + "i"
-    else: # print both
-        operator = ' + ' if im > 0 else ' - '
-        print "{0:.2f}".format(real) + operator + "{0:.2f}".format(abs(im)) + "i"
-
-def print_sum(C, D):
-    real = C[0] + D[0]
-    im = C[1] + D[1]
-    print_complex(real, im)
-
-def print_diff(C, D):
-    real = C[0] - D[0]
-    im = C[1] - D[1]
-    print_complex(real, im)
-
-def print_prod(C, D):
-    real = C[0] * D[0] - C[1] * D[1]
-    im = C[0] * D[1] + C[1] * D[0]
-    print_complex(real, im)
-    
-def print_quot(C, D):
-    real = (C[0] * D[0] + C[1] * D[1]) / (D[0]*D[0] + D[1]*D[1])
-    im  = (C[1] * D[0] - C[0] * D[1]) / (D[0]*D[0] + D[1]*D[1])
-    print_complex(real, im)
-    
-def print_mod(C):
-    mod = sqrt(C[0]**2 + C[1]**2)
-    print "{0:.2f}".format(mod)
+class ComplexNumber(object):
+	
+	def __init__(self, num):
+		self.real = num[0]
+		self.imaginary = num[1]
+		
+	def mod(self):
+		return sqrt(self.real**2 + self.imaginary**2)
+	
+	def __add__(self, other):
+		assert isinstance(other, ComplexNumber)
+		real = self.real + other.real
+		im = self.imaginary + other.imaginary
+		return ComplexNumber((real, im))
+	
+	def __sub__(self, other):
+		assert isinstance(other, ComplexNumber)
+		real = self.real - other.real
+		im = self.imaginary - other.imaginary
+		return ComplexNumber((real, im))
+	
+	def __mul__(self, other):
+		assert isinstance(other, ComplexNumber)
+		real = self.real * other.real - self.imaginary * other.imaginary
+		im = self.real * other.imaginary + self.imaginary * other.real
+		return ComplexNumber((real, im))
+		
+	def __div__(self, other):
+		assert isinstance(other, ComplexNumber)
+		real = (self.real * other.real + self.imaginary * other.imaginary) / (other.real**2 + other.imaginary**2)
+		im  = (self.imaginary * other.real - self.real * other.imaginary) / (other.real**2 + other.imaginary**2)
+		return ComplexNumber((real, im))
+		
+	def __str__(self):
+		return repr(self)
+	
+	def __repr__(self):
+		real, im = self.real, self.imaginary
+		if real == 0 and im == 0: # print 0
+			return '0.00'
+		elif im == 0: # print only real part
+			return "{0:.2f}".format(real)
+		elif real == 0: # print only imaginary part
+			sign = '' if im > 0 else '-'
+			return sign + "{0:.2f}".format(abs(im)) + "i"
+		else: # print both
+			operator = ' + ' if im > 0 else ' - '
+			return "{0:.2f}".format(real) + operator + "{0:.2f}".format(abs(im)) + "i"
         
-C = tuple(map(float, raw_input().split()))
-D = tuple(map(float, raw_input().split()))
+C = ComplexNumber(map(float, raw_input().split()))
+D = ComplexNumber(map(float, raw_input().split()))
 
-print_sum(C, D)
-print_diff(C, D)
-print_prod(C, D)
-print_quot(C, D)
-print_mod(C)
-print_mod(D)
+print C + D
+print C - D
+print C * D
+print C / D
+print "{0:.2f}".format(C.mod())
+print "{0:.2f}".format(D.mod())
